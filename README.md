@@ -29,12 +29,14 @@ conda activate /share/pkg.8/qiime2/2025.4.0/install-amplicon
 
 ```bash
 qiime rescript get-ncbi-data \
-  --p-query 'Vertebrata[Organism] AND 12S[Title] AND 800:20000[SLEN]' \
+  --p-query 'Vertebrata[Organism] AND 12S[Title] AND 800:20000[SLEN] AND mitochondrion[Filter]' \
   --o-sequences ncbi-seqs.qza \
   --o-taxonomy ncbi-taxonomy.qza
 ```
 
-This fetches every vertebrate 12S record of 800 bp or more (48,255 on 2026-11-23).
+This fetches every vertebrate mitochondrial 12S record of 800 bp or more (43,816 on 2026-11-23).
+`mitochondrion[Filter]` leaves out nuclear genes whose names contain "12S" (for example METTL15,
+a "12S rRNA methyltransferase"), which aren't 12S rRNA sequences.
 
 `--p-query` is a normal [NCBI Nucleotide search](https://www.ncbi.nlm.nih.gov/nuccore). Try it on the
 website first to see how many sequences it finds. The one above is an example; see
@@ -78,7 +80,7 @@ Results go to the same `WORKDIR` as before (`taxonomy_assay1_blastn.tsv`, `taxa_
   In a test on the SCC, a 1,077 bp sequence matched 169 bp references of its own species at 100%
   identity, but they covered only 16% of it, so PRONAME left it `Unassigned`.
 - More than half of the vertebrate 12S records on NCBI are shorter than 800 bp
-  (counts on 2026-11-23: 48,255 records of 800 bp or more; 61,623 of 100–799 bp).
+  (counts on 2026-11-23, with `mitochondrion[Filter]`: 43,816 records of 800 bp or more; 59,814 of 100–799 bp).
 - To narrow the search to a group, change `Vertebrata` (for example `Actinopteri[Organism]` for
   ray-finned fishes).
 
@@ -90,6 +92,7 @@ Measured on the SCC (2026-11-23), download step only:
 |---|---|
 | 995 | 45 s |
 | 5,629 | 1 min 8 s |
+| 43,816 (the step 2 search) | 4 min 9 s |
 
-About 1.4 GB of memory. NCBI asks that large downloads (RESCRIPt's guide: more than 125,000
+About 1.4–1.7 GB of memory. NCBI asks that large downloads (RESCRIPt's guide: more than 125,000
 sequences) run on weekends or between 9 pm and 5 am Eastern time.
