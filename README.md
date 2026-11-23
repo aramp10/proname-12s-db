@@ -34,6 +34,8 @@ qiime rescript get-ncbi-data \
   --o-taxonomy ncbi-taxonomy.qza
 ```
 
+This fetches every vertebrate 12S record of 800 bp or more (48,255 on 2026-11-23).
+
 `--p-query` is a normal [NCBI Nucleotide search](https://www.ncbi.nlm.nih.gov/nuccore). Try it on the
 website first to see how many sequences it finds. The one above is an example; see
 "Choosing the search" below.
